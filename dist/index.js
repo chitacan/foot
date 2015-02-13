@@ -8,25 +8,25 @@
     return delete $httpProvider.defaults.headers.common['X-Requested-With'];
   });
 
-  app.controller('audioCtrl', function($scope, program, _) {
-    program.sync().then(function(res) {
-      var list, resource;
-      console.log(res);
-      list = res.list.data.results.collection1.message;
-      resource = res.info.data.results.resources;
-      return $scope.programs = _.map(list, function(v, k) {
-        return _.extend(v, resource[k]);
+  app.controller('footCtrl', function($scope, program) {
+    var init;
+    init = function() {
+      return program.fetch().then(function(res) {
+        $scope.programs = res;
+        return $scope.isError = false;
+      })["catch"](function(e) {
+        console.error(e);
+        return $scope.isError = true;
       });
-    })["catch"](function(e) {
-      return console.error(e);
-    });
+    };
     $scope.onClickList = function(program) {
       if (program.status === 4) {
         this.player.load(program.url);
         return this.player.play();
       }
     };
-    return audiojs.events.ready(function() {
+    $scope.onClickRetry = init;
+    audiojs.events.ready(function() {
       var p;
       p = audiojs.createAll();
       $scope.player = p[0];
@@ -43,9 +43,10 @@
         return console.log('suspend');
       });
     });
+    return init();
   });
 
-  app.service('program', function($http, $q) {
+  app.service('program', function($http, $q, _) {
     this.list = function() {
       var req;
       req = {
@@ -69,10 +70,17 @@
       };
       return $http(req);
     };
-    this.sync = function() {
+    this.fetch = function() {
       return $q.all({
         list: this.list(),
         info: this.info()
+      }).then(function(res) {
+        var list, resource;
+        list = res.list.data.results.collection1.message;
+        resource = res.info.data.results.resources;
+        return _.map(list, function(v, k) {
+          return _.extend(v, resource[k]);
+        });
       });
     };
     return this;
