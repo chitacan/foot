@@ -3,20 +3,21 @@ app = angular.module 'footApp', []
 app.config ($httpProvider) ->
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-app.controller 'audioCtrl', ($scope, program, _) ->
-  program.sync().then (res) ->
-    console.log res
-    list     = res.list.data.results.collection1.message
-    resource = res.info.data.results.resources
-
-    $scope.programs = _.map list, (v, k) -> _.extend v, resource[k]
-  .catch (e) ->
-    console.error e
+app.controller 'footCtrl', ($scope, program) ->
+  init = () ->
+    program.fetch().then (res) ->
+      $scope.programs = res
+      $scope.isError = false
+    .catch (e) ->
+      console.error e
+      $scope.isError = true
 
   $scope.onClickList = (program) -> 
     if program.status == 4
       this.player.load program.url
       this.player.play()
+
+  $scope.onClickRetry = init
 
   audiojs.events.ready () ->
     p = audiojs.createAll()
@@ -26,7 +27,9 @@ app.controller 'audioCtrl', ($scope, program, _) ->
     p[0].element.addEventListener 'error',   () -> console.log 'error'
     p[0].element.addEventListener 'suspend', () -> console.log 'suspend'
 
-app.service 'program', ($http, $q) ->
+  init()
+
+app.service 'program', ($http, $q, _) ->
   this.list = () ->
     req =
       method : 'GET'
@@ -44,8 +47,12 @@ app.service 'program', ($http, $q) ->
         apikey    : 'YmPUBuAN7hpEa3LbfEsA5zAgdEs0qcuW'
     $http req
 
-  this.sync = () ->
+  this.fetch = () ->
     $q.all { list : this.list(), info : this.info() }
+      .then (res) ->
+        list     = res.list.data.results.collection1.message
+        resource = res.info.data.results.resources
+        _.map list, (v, k) -> _.extend v, resource[k]
 
   this
 
