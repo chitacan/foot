@@ -1,12 +1,13 @@
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
 body {
   color: #666;
-  font-family: sans-serif;
+  font-family: 'Hanna', serif;
   line-height: 1.4;
 }
 h1 {
   color: #444;
-  font-size: 1.2em;
-  padding: 14px 2px 12px;
+  font-size: 3.7em;
+  padding: 4px 2px 12px;
   margin: 0px;
 }
 h1 em {
@@ -37,6 +38,9 @@ ol li {
   padding: 9px 2px 10px;
   border-bottom: 1px solid #ccc;
   cursor: pointer;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 0.3px;
 }
 ol li a {
 }
@@ -69,6 +73,19 @@ li.playing:before {
   background-image: none;
 }
 
+.error-message {
+  font-size: 2.5em;
+  text-align: center;
+  color: #999;
+  padding: 20px 0px 0px 0px;
+}
+
+.error-retry{
+  display: block;
+  font-size: 1.7em;
+  text-align: center;
+  color: #777;
+}
 @media screen and (max-device-width: 480px) {
   #wrapper {
     position: relative;
