@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="footApp">
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=0.6, user-scalable=no, minimal-ui">
+  <!-- not working on ios 8.1.3 http://stackoverflow.com/questions/25972362/why-html5-video-doesnt-play-in-ios-8-webappwebview -->
+  <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
+  <script src="http://underscorejs.org/underscore-min.js"></script>
+  <script src="./dist/audio.min.js"></script>
+  <script src="./dist/angular.min.js"></script>
+  <!-- for chrome prior M39 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link href="./index.css" rel="stylesheet">
+</head>
+<body>
+  <div id="wrapper" ng-controller="audioCtrl">
+    <audio></audio>
+    <ol>
+      <li ng-repeat="program in programs" ng-click="onClickList(program)">
+        <a href="#" data-src="{{program.url | trusted}}">{{program.radioListTitle}}</a>
+        <small>{{program.datetimeObj | date:'yyyy.MM.dd'}}</small>
+      </li>
+    </ol>
+  </div>
+  <script src="./dist/index.js"></script>
+</body>
+</html>
