@@ -15,6 +15,7 @@
 </head>
 <body>
   <div id="wrapper" ng-controller="audioCtrl">
+    <h1>풋토</h1>
     <audio></audio>
     <ol>
       <li ng-repeat="program in programs" ng-click="onClickList(program)">
@@ -22,6 +23,10 @@
         <small>{{program.datetimeObj | date:'yyyy.MM.dd'}}</small>
       </li>
     </ol>
+    <div ng-show=isError>
+      <div class="error-message">엌 에러가...</div>
+      <a href="#" class="error-retry" ng-click="onClickRetry()">다시시도</div>
+    </div>
   </div>
   <script src="./index.js"></script>
   <script>
