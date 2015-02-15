@@ -42,7 +42,7 @@ app.service 'program', ($http, $q, _) ->
   this.info = () ->
     req =
       method : 'GET'
-      url    : 'https://www.kimonolabs.com/api/ciqlk7me'
+      url    : 'https://www.kimonolabs.com/api/dumtajyi'
       params :
         apikey    : 'YmPUBuAN7hpEa3LbfEsA5zAgdEs0qcuW'
     $http req
