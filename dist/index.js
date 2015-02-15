@@ -63,7 +63,7 @@
       var req;
       req = {
         method: 'GET',
-        url: 'https://www.kimonolabs.com/api/ciqlk7me',
+        url: 'https://www.kimonolabs.com/api/dumtajyi',
         params: {
           apikey: 'YmPUBuAN7hpEa3LbfEsA5zAgdEs0qcuW'
         }
@@ -75,11 +75,13 @@
         list: this.list(),
         info: this.info()
       }).then(function(res) {
-        var list, resource;
+        var list, resc;
         list = res.list.data.results.collection1.message;
-        resource = res.info.data.results.resources;
-        return _.map(list, function(v, k) {
-          return _.extend(v, resource[k]);
+        resc = res.info.data.results.resources;
+        return _.map(list, function(v) {
+          return _.extend(v, _.find(resc, function(r) {
+            return r.url.indexOf(v.fileName) > 0;
+          }));
         });
       });
     };
