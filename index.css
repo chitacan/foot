@@ -50,23 +50,19 @@ ol li small {
 li.playing {
   color: #aaa;
   text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3);
+  list-style-type: none;
 }
 li.playing a {
   color: #000;
 }
 li.playing:before {
   content: '♬';
-  width: 14px;
-  height: 14px;
-  padding: 3px;
+  padding: 0px 7px 0px 5px;
   line-height: 14px;
   margin: 0px;
-  position: absolute;
-  left: -24px;
   top: 9px;
   color: #000;
-  font-size: 13px;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+  font-size: 1.3em;
 }
 .audiojs {
   width: 480px;

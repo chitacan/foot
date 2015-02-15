@@ -18,7 +18,7 @@
     <h1>풋토</h1>
     <audio></audio>
     <ol>
-      <li ng-repeat="program in programs" ng-click="onClickList(program)">
+      <li ng-repeat="program in programs" ng-click="onClickList(program)" ng-class="{'playing': selected === program}">
         <a href="#" data-src="{{program.url | trusted}}">{{program.radioListTitle}}</a>
         <small ng-switch on="program.status">
           <div ng-switch-when="4">{{program.datetimeObj | date:'yyyy.MM.dd'}}</div>
