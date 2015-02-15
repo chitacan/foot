@@ -20,7 +20,11 @@
     <ol>
       <li ng-repeat="program in programs" ng-click="onClickList(program)">
         <a href="#" data-src="{{program.url | trusted}}">{{program.radioListTitle}}</a>
-        <small>{{program.datetimeObj | date:'yyyy.MM.dd'}}</small>
+        <small ng-switch on="program.status">
+          <div ng-switch-when="4">{{program.datetimeObj | date:'yyyy.MM.dd'}}</div>
+          <div ng-switch-when="2">(방송 중)</div>
+          <div ng-switch-when="1">{{program.datetimeObj | date:'yyyy.MM.dd'}} (방송예정)</div>
+        </small>
       </li>
     </ol>
     <div ng-show=isError>
