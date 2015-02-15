@@ -50,9 +50,9 @@ app.service 'program', ($http, $q, _) ->
   this.fetch = () ->
     $q.all { list : this.list(), info : this.info() }
       .then (res) ->
-        list     = res.list.data.results.collection1.message
-        resource = res.info.data.results.resources
-        _.map list, (v, k) -> _.extend v, resource[k]
+        list = res.list.data.results.collection1.message
+        resc = res.info.data.results.resources
+        _.map list, (v) -> _.extend v, _.find resc, (r) -> r.url.indexOf(v.fileName) > 0
 
   this
 
