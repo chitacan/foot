@@ -14,8 +14,9 @@ app.controller 'footCtrl', ($scope, program) ->
 
   $scope.onClickList = (program) -> 
     if program.status == 4
-      this.player.load program.url
-      this.player.play()
+      $scope.selected = program
+      $scope.player.load program.url
+      $scope.player.play()
 
   $scope.onClickRetry = init
 
