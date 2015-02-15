@@ -21,8 +21,9 @@
     };
     $scope.onClickList = function(program) {
       if (program.status === 4) {
-        this.player.load(program.url);
-        return this.player.play();
+        $scope.selected = program;
+        $scope.player.load(program.url);
+        return $scope.player.play();
       }
     };
     $scope.onClickRetry = init;
