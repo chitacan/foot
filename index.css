@@ -26,7 +26,7 @@ a {
 ol {
   padding: 0px;
   margin: 0px;
-  list-style: decimal-leading-zero inside;
+  list-style-type: none; 
   color: #ccc;
   width: 480px;
   border-top: 1px solid #ccc;
@@ -57,10 +57,8 @@ li.playing a {
 }
 li.playing:before {
   content: '♬';
-  padding: 0px 7px 0px 5px;
+  padding: 0px 10px 0px 8px;
   line-height: 14px;
-  margin: 0px;
-  top: 9px;
   color: #000;
   font-size: 1.3em;
 }
@@ -93,5 +91,8 @@ li.playing:before {
   }
   .audiojs {
     width: 100%;
+  }
+  li.playing:before {
+    font-size: 0.6em;
   }
 }
