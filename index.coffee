@@ -37,7 +37,6 @@ app.service 'program', ($http, $q, _) ->
       url    : 'https://www.kimonolabs.com/api/3kplvmje'
       params :
         apikey    : 'YmPUBuAN7hpEa3LbfEsA5zAgdEs0qcuW'
-        kimmodify : '1'
     $http req
 
   this.info = () ->
@@ -51,7 +50,8 @@ app.service 'program', ($http, $q, _) ->
   this.fetch = () ->
     $q.all { list : this.list(), info : this.info() }
       .then (res) ->
-        list = res.list.data.results.collection1.message
+        programs = JSON.parse res.list.data.results.collection1[0].programs
+        list = programs.message
         resc = res.info.data.results.resources
         _.map list, (v) -> _.extend v, _.find resc, (r) -> r.url.indexOf(v.fileName) > 0
 
