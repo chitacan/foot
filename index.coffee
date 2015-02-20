@@ -1,11 +1,13 @@
-app = angular.module 'footApp', []
+app = angular.module 'footApp', ['ngStorage']
 
 app.config ($httpProvider) ->
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-app.controller 'footCtrl', ($scope, program) ->
+app.controller 'footCtrl', ($scope, program, $localStorage) ->
+
   init = () ->
     program.fetch().then (res) ->
+      console.log res
       $scope.programs = res
       $scope.isError = false
     .catch (e) ->
@@ -14,8 +16,10 @@ app.controller 'footCtrl', ($scope, program) ->
 
   $scope.onClickList = (program) -> 
     if program.status == 4
+      lastPlayed = Math.round $localStorage[program.radioId] ? 0
+      console.log lastPlayed
       $scope.selected = program
-      $scope.player.load program.url
+      $scope.player.load program.url + "#t=#{lastPlayed}"
       $scope.player.play()
 
   $scope.onClickRetry = init
@@ -23,10 +27,17 @@ app.controller 'footCtrl', ($scope, program) ->
   audiojs.events.ready () ->
     p = audiojs.createAll()
     $scope.player= p[0]
-    p[0].element.addEventListener 'pause',   () -> console.log 'paused'
-    p[0].element.addEventListener 'play',    () -> console.log 'play'
+    p[0].element.addEventListener 'pause',   () ->
+      $localStorage[$scope.selected.radioId] = this.currentTime
+      $scope.$apply()
+      console.log 'paused'
+    p[0].element.addEventListener 'play',    () ->
+      console.log 'play'
     p[0].element.addEventListener 'error',   () -> console.log 'error'
-    p[0].element.addEventListener 'suspend', () -> console.log 'suspend'
+    p[0].element.addEventListener 'seeked',  () ->
+      $localStorage[$scope.selected.radioId] = this.currentTime
+      $scope.$apply()
+      console.log 'seeked'
 
   init()
 
