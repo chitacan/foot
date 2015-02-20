@@ -54,8 +54,7 @@
         method: 'GET',
         url: 'https://www.kimonolabs.com/api/3kplvmje',
         params: {
-          apikey: 'YmPUBuAN7hpEa3LbfEsA5zAgdEs0qcuW',
-          kimmodify: '1'
+          apikey: 'YmPUBuAN7hpEa3LbfEsA5zAgdEs0qcuW'
         }
       };
       return $http(req);
@@ -76,8 +75,9 @@
         list: this.list(),
         info: this.info()
       }).then(function(res) {
-        var list, resc;
-        list = res.list.data.results.collection1.message;
+        var list, programs, resc;
+        programs = JSON.parse(res.list.data.results.collection1[0].programs);
+        list = programs.message;
         resc = res.info.data.results.resources;
         return _.map(list, function(v) {
           return _.extend(v, _.find(resc, function(r) {
