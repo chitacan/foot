@@ -3,7 +3,7 @@ app = angular.module 'footApp', ['ngStorage']
 app.config ($httpProvider) ->
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-app.controller 'footCtrl', ($scope, program, $localStorage) ->
+app.controller 'footCtrl', ($scope, program, player) ->
 
   init = () ->
     program.fetch().then (res) ->
@@ -16,28 +16,9 @@ app.controller 'footCtrl', ($scope, program, $localStorage) ->
 
   $scope.onClickList = (program) -> 
     if program.status == 4
-      lastPlayed = Math.round $localStorage[program.radioId] ? 0
-      console.log lastPlayed
-      $scope.selected = program
-      $scope.player.load program.url + "#t=#{lastPlayed}"
-      $scope.player.play()
+      player.play(program)
 
   $scope.onClickRetry = init
-
-  audiojs.events.ready () ->
-    p = audiojs.createAll()
-    $scope.player= p[0]
-    p[0].element.addEventListener 'pause',   () ->
-      $localStorage[$scope.selected.radioId] = this.currentTime
-      $scope.$apply()
-      console.log 'paused'
-    p[0].element.addEventListener 'play',    () ->
-      console.log 'play'
-    p[0].element.addEventListener 'error',   () -> console.log 'error'
-    p[0].element.addEventListener 'seeked',  () ->
-      $localStorage[$scope.selected.radioId] = this.currentTime
-      $scope.$apply()
-      console.log 'seeked'
 
   init()
 
@@ -65,6 +46,29 @@ app.service 'program', ($http, $q, _) ->
         list = programs.message
         resc = res.info.data.results.resources
         _.map list, (v) -> _.extend v, _.find resc, (r) -> r.url.indexOf(v.fileName) > 0
+
+  this
+
+app.service 'player', ($rootScope, $localStorage) ->
+  player  = audiojs.createAll()[0]
+  element = player.element
+  element.addEventListener 'pause',   () => this.mark()
+  element.addEventListener 'seeked',  () => this.mark()
+  element.addEventListener 'play',    () -> console.log 'play'
+  element.addEventListener 'error',   () -> console.log 'error'
+
+  this.play = (program) ->
+    position = this.lastPosition program.radioId
+    player.id = program.radioId
+    player.load program.url + "#t=#{position}"
+    player.play()
+
+  this.lastPosition = (id) ->
+    Math.round $localStorage[id] ? 0
+
+  this.mark = () ->
+    $localStorage[player.id] = element.currentTime
+    $rootScope.$apply()
 
   this
 
