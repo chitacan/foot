@@ -2,16 +2,17 @@
 (function() {
   var app;
 
-  app = angular.module('footApp', []);
+  app = angular.module('footApp', ['ngStorage']);
 
   app.config(function($httpProvider) {
     return delete $httpProvider.defaults.headers.common['X-Requested-With'];
   });
 
-  app.controller('footCtrl', function($scope, program) {
+  app.controller('footCtrl', function($scope, program, player) {
     var init;
     init = function() {
       return program.fetch().then(function(res) {
+        console.log(res);
         $scope.programs = res;
         return $scope.isError = false;
       })["catch"](function(e) {
@@ -21,29 +22,10 @@
     };
     $scope.onClickList = function(program) {
       if (program.status === 4) {
-        $scope.selected = program;
-        $scope.player.load(program.url);
-        return $scope.player.play();
+        return player.play(program);
       }
     };
     $scope.onClickRetry = init;
-    audiojs.events.ready(function() {
-      var p;
-      p = audiojs.createAll();
-      $scope.player = p[0];
-      p[0].element.addEventListener('pause', function() {
-        return console.log('paused');
-      });
-      p[0].element.addEventListener('play', function() {
-        return console.log('play');
-      });
-      p[0].element.addEventListener('error', function() {
-        return console.log('error');
-      });
-      return p[0].element.addEventListener('suspend', function() {
-        return console.log('suspend');
-      });
-    });
     return init();
   });
 
@@ -85,6 +67,44 @@
           }));
         });
       });
+    };
+    return this;
+  });
+
+  app.service('player', function($rootScope, $localStorage) {
+    var element, player;
+    player = audiojs.createAll()[0];
+    element = player.element;
+    element.addEventListener('pause', (function(_this) {
+      return function() {
+        return _this.mark();
+      };
+    })(this));
+    element.addEventListener('seeked', (function(_this) {
+      return function() {
+        return _this.mark();
+      };
+    })(this));
+    element.addEventListener('play', function() {
+      return console.log('play');
+    });
+    element.addEventListener('error', function() {
+      return console.log('error');
+    });
+    this.play = function(program) {
+      var position;
+      position = this.lastPosition(program.radioId);
+      player.id = program.radioId;
+      player.load(program.url + ("#t=" + position));
+      return player.play();
+    };
+    this.lastPosition = function(id) {
+      var _ref;
+      return Math.round((_ref = $localStorage[id]) != null ? _ref : 0);
+    };
+    this.mark = function() {
+      $localStorage[player.id] = element.currentTime;
+      return $rootScope.$apply();
     };
     return this;
   });
