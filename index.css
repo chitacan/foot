@@ -53,13 +53,6 @@ li.playing {
 li.playing a {
   color: #000;
 }
-li.playing:before {
-  content: '♬';
-  padding: 0px 10px 0px 8px;
-  line-height: 14px;
-  color: #000;
-  font-size: 1.3em;
-}
 .progress {
   content: "";
   position: absolute;
@@ -100,8 +93,5 @@ li.playing:before {
   }
   .audiojs {
     width: 100%;
-  }
-  li.playing:before {
-    font-size: 0.6em;
   }
 }
