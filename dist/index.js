@@ -12,7 +12,6 @@
     var init;
     init = function() {
       return program.fetch().then(function(res) {
-        console.log(res);
         $scope.programs = res;
         return $scope.isError = false;
       })["catch"](function(e) {
@@ -22,6 +21,7 @@
     };
     $scope.onClickList = function(program) {
       if (program.status === 4) {
+        $scope.selected = program;
         return player.play(program);
       }
     };
@@ -29,7 +29,7 @@
     return init();
   });
 
-  app.service('program', function($http, $q, _) {
+  app.service('program', function($http, $q, _, player) {
     this.list = function() {
       var req;
       req = {
@@ -66,6 +66,12 @@
             return r.url.indexOf(v.fileName) > 0;
           }));
         });
+      }).then(function(res) {
+        return res.map(function(p) {
+          return _.extend(p, {
+            progress: player.lastProgress(p)
+          });
+        });
       });
     };
     return this;
@@ -101,6 +107,14 @@
     this.lastPosition = function(id) {
       var _ref;
       return Math.round((_ref = $localStorage[id]) != null ? _ref : 0);
+    };
+    this.lastProgress = function(program) {
+      var lastPosition;
+      lastPosition = this.lastPosition(program.radioId);
+      if (lastPosition === 0) {
+        return '0%';
+      }
+      return (lastPosition * 100 / program.totalSecond) + "%";
     };
     this.mark = function() {
       $localStorage[player.id] = element.currentTime;
