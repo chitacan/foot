@@ -32,7 +32,7 @@ ol {
   border-top: 1px solid #ccc;
   font-size: 0.9em;
 }
-ol li {
+li {
   position: relative;
   margin: 0px;
   padding: 9px 2px 10px;
@@ -42,9 +42,7 @@ ol li {
   font-size: 1.1em;
   letter-spacing: 0.3px;
 }
-ol li a {
-}
-ol li small {
+li > small {
   float: right;
 }
 li.playing {
@@ -61,6 +59,17 @@ li.playing:before {
   line-height: 14px;
   color: #000;
   font-size: 1.3em;
+}
+.progress {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 255, 0, 0.1);
+  z-index: 1;
+  overflow: hidden;
 }
 .audiojs {
   width: 480px;
