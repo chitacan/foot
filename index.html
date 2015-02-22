@@ -20,7 +20,7 @@
     <audio></audio>
     <ol>
       <li ng-repeat="program in programs" ng-click="onClickList(program)" ng-class="{'playing': selected === program}">
-        <img src="./bower_components/loading/loading-bars.svg" width="20" height="20" ng-show="selected === program"/>
+        <img src="./dist/loading-bars.svg" width="20" height="20" ng-show="selected === program"/>
         <a href="#" data-src="{{program.url | trusted}}">{{program.radioListTitle}}</a>
         <small ng-switch on="program.status">
           <div ng-switch-when="4">{{program.datetimeObj | date:'yyyy.MM.dd'}}</div>
