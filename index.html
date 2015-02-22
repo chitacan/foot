@@ -26,6 +26,7 @@
           <div ng-switch-when="2">(방송 중)</div>
           <div ng-switch-when="1">{{program.datetimeObj | date:'yyyy.MM.dd'}} (방송예정)</div>
         </small>
+        <span class="progress" ng-style="{'width':program.progress}"/>
       </li>
     </ol>
     <div ng-show=isError>
