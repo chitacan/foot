@@ -7,7 +7,6 @@ app.controller 'footCtrl', ($scope, program, player) ->
 
   init = () ->
     program.fetch().then (res) ->
-      console.log res
       $scope.programs = res
       $scope.isError = false
     .catch (e) ->
@@ -16,13 +15,14 @@ app.controller 'footCtrl', ($scope, program, player) ->
 
   $scope.onClickList = (program) -> 
     if program.status == 4
-      player.play(program)
+      $scope.selected = program
+      player.play program
 
   $scope.onClickRetry = init
 
   init()
 
-app.service 'program', ($http, $q, _) ->
+app.service 'program', ($http, $q, _, player) ->
   this.list = () ->
     req =
       method : 'GET'
@@ -46,6 +46,8 @@ app.service 'program', ($http, $q, _) ->
         list = programs.message
         resc = res.info.data.results.resources
         _.map list, (v) -> _.extend v, _.find resc, (r) -> r.url.indexOf(v.fileName) > 0
+      .then (res) ->
+        res.map (p) -> _.extend p, progress: player.lastProgress p
 
   this
 
@@ -65,6 +67,12 @@ app.service 'player', ($rootScope, $localStorage) ->
 
   this.lastPosition = (id) ->
     Math.round $localStorage[id] ? 0
+
+  this.lastProgress = (program) ->
+    lastPosition = this.lastPosition program.radioId
+    if lastPosition is 0 then return '0%'
+
+    "#{lastPosition * 100 / program.totalSecond}%"
 
   this.mark = () ->
     $localStorage[player.id] = element.currentTime
