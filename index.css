@@ -14,10 +14,6 @@ h1 em {
   font-style: normal;
   color: #999;
 }
-a {
-  color: #888;
-  text-decoration: none;
-}
 #wrapper {
   width: 480px;
   margin: auto;
@@ -33,7 +29,10 @@ ol {
   font-size: 0.9em;
 }
 li {
-  position: relative;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
   margin: 0px;
   padding: 9px 2px 10px;
   border-bottom: 1px solid #ccc;
@@ -41,9 +40,16 @@ li {
   font-weight: 100;
   font-size: 1.1em;
   letter-spacing: 0.3px;
+  position: relative;
 }
-li > small {
-  float: right;
+li a {
+  flex: 1 0 0;
+  -webkit-flex: 1 0 0;
+  color: #888;
+  text-decoration: none;
+}
+li img {
+  margin-right: 5px;
 }
 li.playing {
   color: #aaa;
@@ -54,15 +60,13 @@ li.playing a {
   color: #000;
 }
 .progress {
-  content: "";
-  position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  right: 0;
+  right:0;
+  position: absolute;
+  content: "";
   background-color: rgba(0, 255, 0, 0.1);
-  z-index: 1;
-  overflow: hidden;
 }
 .audiojs {
   width: 480px;
